@@ -1,0 +1,15 @@
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: auvo-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: senha
+      MYSQL_DATABASE: GCDB
+    volumes:
+      - ./data:/var/lib/mysql  # Mapeamento do volume
