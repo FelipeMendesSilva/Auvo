@@ -1,4 +1,6 @@
 using Auvo.GloboClima.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -17,7 +19,8 @@ namespace Auvo.GloboClima.API.Controllers
         {
             return View();
         }
-
+        [Authorize]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Privacy()
         {
             return View();
