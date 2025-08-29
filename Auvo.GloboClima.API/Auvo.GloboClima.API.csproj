@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Auvo.GloboClima.Domain\Auvo.GloboClima.Domain.csproj" />
     <ProjectReference Include="..\Auvo.GloboClima.Infra.Data\Auvo.GloboClima.Infra.Data.csproj" />
   </ItemGroup>
 

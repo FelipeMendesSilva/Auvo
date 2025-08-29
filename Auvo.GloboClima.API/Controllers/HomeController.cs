@@ -20,7 +20,7 @@ namespace Auvo.GloboClima.API.Controllers
             return View();
         }
         [Authorize]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Privacy()
         {
             return View();
