@@ -23,6 +23,7 @@ namespace Auvo.GloboClima.Domain.DTO
         string? borders,
         double area,
         string? flag,
+        string?flagImg,
         long population,
         string? continents)
         {
@@ -37,6 +38,7 @@ namespace Auvo.GloboClima.Domain.DTO
             Borders = borders ?? "";
             Area = area;
             Flag = flag ?? "";
+            FlagImg = flagImg ?? "";
             Population = population;
             Continents = continents ?? "";
         }
@@ -52,6 +54,7 @@ namespace Auvo.GloboClima.Domain.DTO
         public string Borders { get; set; }
         public double Area { get; set; }
         public string Flag { get; set; }
+        public string FlagImg { get; set; }
         public long Population { get; set; }
         public string Continents { get; set; }
     }

@@ -22,9 +22,10 @@ namespace Auvo.GloboClima.Infra.Data.Adapters
 
             var names = await urlBase
                 .GetJsonAsync<List<NamesRestCountryResponseDto>>(); // Faz a requisição GET e desserializa o JSON para SuaClasseRetorno
+                   
             foreach(var name in names)
             {
-                countryNames.Add(name.Name.Common);
+                countryNames.Add(name?.Name?.Common ?? "");
             }
             countryNames.Sort();
 
@@ -53,6 +54,7 @@ namespace Auvo.GloboClima.Infra.Data.Adapters
                 string.Join(",", response.borders),
                 response.area,
                 response.flag,
+                response.flags.svg,
                 response.population,
                 string.Join(",", response.continents));
 

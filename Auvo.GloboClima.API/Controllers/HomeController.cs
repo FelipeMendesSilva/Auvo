@@ -36,15 +36,21 @@ namespace Auvo.GloboClima.API.Controllers
             var properties = typeof(CountryDto).GetProperties();
             var htmlBuilder = new StringBuilder();
 
+            htmlBuilder.Append($"<img src={country.FlagImg} alt =\"flag\" class =\"flag\" >");
+            htmlBuilder.Append($"<div>");
             htmlBuilder.Append($"<h2>{country.Name}</h2><ul>");
 
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(country);
-                htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
+                if(prop.Name != "FlagImg")
+                {
+                    htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
+                }
             }
+            htmlBuilder.Append($"</div>");
 
-            htmlBuilder.Append("</ul></body></html>");
+            TempData["FlagLink"] = country.FlagImg;
 
             return Content(htmlBuilder.ToString(), "text/html");
         }
