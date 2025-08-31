@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Auvo.GloboClima.Infra.Data;
+using Auvo.GloboClima.Infra.Data.Context;
 
 namespace Auvo.GloboClima.Infra.Data
 {

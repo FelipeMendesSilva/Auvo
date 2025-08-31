@@ -1,22 +1,21 @@
-using Auvo.GloboClima.Infra.Data;
+using Auvo.GloboClima.API.IoC;
+using Auvo.GloboClima.Infra.Data.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-       options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 43))));
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-})
-.AddSignInManager()
-.AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.RegisterServices(builder.Configuration);
 
 builder.Services.AddRazorPages();
 
@@ -28,7 +27,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseMigrationsEndPoint(); 
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Minha API v1");
+        options.RoutePrefix = "swagger"; // acessível em /swagger
+    });
 }
 else
 {
@@ -48,6 +53,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
+
+
 app.MapRazorPages();
 
 await app.RunAsync();

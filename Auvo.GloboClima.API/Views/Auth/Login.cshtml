@@ -8,14 +8,43 @@
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
 
-<form method="post" asp-action="Login">
+<form id="loginForm">
     <div>
         <label>Email</label>
-        <input asp-for="Email" />
+        <input type="email" id="email" />
     </div>
     <div>
         <label>Senha</label>
-        <input asp-for="Password" type="password" />
+        <input type="password" id="password" />
     </div>
     <button type="submit">Entrar</button>
 </form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+                $("#loginForm").submit(function (e) {
+            e.preventDefault();
+
+            var loginData = {
+                Email: $("#email").val(),
+                Password: $("#password").val()
+            };
+
+            $.ajax({
+                url: "/Auth/Login",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(loginData),
+                success: function (response) {
+                    localStorage.setItem("token", response.token);
+                    window.location.href = "/Home/Index"; // redireciona após login
+                },
+                error: function (xhr) {
+                    $("#resultado").html("Erro: " + xhr.responseText);
+                }
+            });
+        });
+
+    </script>
+}

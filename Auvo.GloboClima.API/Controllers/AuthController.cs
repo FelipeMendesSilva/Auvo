@@ -10,7 +10,7 @@ using System.Text;
 namespace Auvo.GloboClima.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Auth")]
     public class AuthController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -22,6 +22,7 @@ namespace Auvo.GloboClima.API.Controllers
             _signInManager = signInManager;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("login")]
         public IActionResult Login()
         {
@@ -29,8 +30,7 @@ namespace Auvo.GloboClima.API.Controllers
         }
 
         [HttpPost("login")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([FromForm] LoginDto model)
+        public async Task<IActionResult> Login( LoginDto model)
         {
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -45,12 +45,7 @@ namespace Auvo.GloboClima.API.Controllers
                 //  Gera o JWT (para APIs)
                 var token = GenerateJwtToken(user);
 
-                // Armazena dados no TempData
-                TempData["UserEmail"] = user.Email;
-                TempData["Token"] = token;
-
-
-                return RedirectToAction("Index", "Home");
+                return Ok(new { token = token });
             }
         }
 
@@ -62,7 +57,7 @@ namespace Auvo.GloboClima.API.Controllers
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-            var secureKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+            var secureKey = "u8f9Lk3v9QzX1aB7c2d9eF6gH3jK0mN5pR8sT1vW4yZ7=";
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

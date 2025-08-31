@@ -19,9 +19,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.19" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Auvo.GloboClima.Application\Auvo.GloboClima.Application.csproj" />
     <ProjectReference Include="..\Auvo.GloboClima.Domain\Auvo.GloboClima.Domain.csproj" />
     <ProjectReference Include="..\Auvo.GloboClima.Infra.Data\Auvo.GloboClima.Infra.Data.csproj" />
   </ItemGroup>
