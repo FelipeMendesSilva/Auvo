@@ -30,26 +30,24 @@ namespace Auvo.GloboClima.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login( LoginDto model)
+        public async Task<IActionResult> Login(LoginDto model)
         {
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null) return Unauthorized("Usuário não encontrado");
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return Unauthorized("Usuário não encontrado");
 
-                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-                if (!result.Succeeded) return Unauthorized("Credenciais inválidas");
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            if (!result.Succeeded) return Unauthorized("Credenciais inválidas");
 
-                //  Autentica via cookie (para UI)
-                await _signInManager.SignInAsync(user, isPersistent: false);
+            //  Autentica via cookie (para UI)
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
-                //  Gera o JWT (para APIs)
-                var token = GenerateJwtToken(user);
+            //  Gera o JWT (para APIs)
+            var token = GenerateJwtToken(user);
 
-                return Ok(new { token = token });
-            }
+            return Ok(new { token = token });
         }
 
-        private string GenerateJwtToken(IdentityUser user)
+        private static string GenerateJwtToken(IdentityUser user)
         {
             var claims = new[]
             {

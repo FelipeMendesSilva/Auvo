@@ -1,6 +1,8 @@
-﻿using Auvo.GloboClima.Domain.Interfaces;
+﻿using Auvo.GloboClima.Domain.Interfaces.Adapter;
+using Auvo.GloboClima.Domain.Interfaces.Repositories;
 using Auvo.GloboClima.Infra.Data.Adapters;
 using Auvo.GloboClima.Infra.Data.Context;
+using Auvo.GloboClima.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,7 @@ namespace Auvo.GloboClima.Infra.Data.IoC
                    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 43))));
 
             services.AddScoped<ICountryInfoAdapter, CountryInfoAdapter>();
-
+            services.AddScoped<IFavoriteRepository, FavoriteRepository>();
         }
     }
 }

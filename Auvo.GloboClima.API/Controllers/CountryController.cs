@@ -9,74 +9,66 @@ using System.Text;
 
 namespace Auvo.GloboClima.API.Controllers
 {
-
-    [ApiController]
     [Route("Country")]
     public class CountryController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
-        //private readonly ICountryService _countryService;
+        private readonly ILogger<CountryController> _logger;
+        private readonly ICountryService _countryService;
 
-        //public CountryController(ILogger<HomeController> logger, ICountryService countryService)
-        //{
-        //    _logger = logger;
-        //    _countryService = countryService;
-        //}
+        public CountryController(ILogger<CountryController> logger, ICountryService countryService)
+        {
+            _logger = logger;
+            _countryService = countryService;
+        }
 
-        //public async Task<IActionResult> IndexAsync(CancellationToken cancellationToken)
-        //{
-        //    var countries = await _countryService.GetAllCountryNamesAsync(cancellationToken);
-        //    var model = new IndexModel();
-        //    model.CountryNames.AddRange(countries);
-        //    return View(model);
-        //}
+        [HttpGet("CountryIndex")]
+        public async Task<IActionResult> CountryIndexAsync(CancellationToken cancellationToken)
+        {
+            var countries = await _countryService.GetAllCountryNamesAsync(cancellationToken);
+            var model = new CountryModel();
+            model.CountryNames.AddRange(countries);
+            return View("CountryIndex",model);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> GetCountryAsync(string countryName, CancellationToken cancellationToken)
-        //{
-        //    var country = await _countryService.GetCountryByNameAsync(countryName,cancellationToken);
+        [HttpPost("GetCountry")]
+        public async Task<IActionResult> GetCountryAsync( string countryName, CancellationToken cancellationToken)
+        {
+            var country = await _countryService.GetCountryByNameAsync(countryName, cancellationToken);
 
-        //    var properties = typeof(CountryDto).GetProperties();
-        //    var htmlBuilder = new StringBuilder();
+            var properties = typeof(CountryDto).GetProperties();
+            var htmlBuilder = new StringBuilder();
 
-        //    htmlBuilder.Append($"<img src={country.FlagImg} alt =\"flag\" class =\"flag\" >");
-        //    htmlBuilder.Append($"<div>");
-        //    htmlBuilder.Append($"<h2>{country.Name}</h2><ul>");
+            htmlBuilder.Append($"<img src={country.FlagImg} alt =\"flag\" class =\"flag\" >");
+            htmlBuilder.Append($"<div>");
+            htmlBuilder.Append($"<h2>{country.Name}</h2><ul>");
 
-        //    foreach (var prop in properties)
-        //    {
-        //        var value = prop.GetValue(country);
-        //        htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
-        //    }
-        //    htmlBuilder.Append($"</div>");
+            foreach (var prop in properties)
+            {
+                var value = prop.GetValue(country);
+                htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
+            }
+            htmlBuilder.Append($"</div>");
 
-        //    TempData["FlagLink"] = country.FlagImg;
+            return Content(htmlBuilder.ToString(), "text/html");
+        }
 
-        //    return Content(htmlBuilder.ToString(), "text/html");
-        //}
-
+        //[HttpGet("Favorites")]
         //[Authorize]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public IActionResult Favorites()
+        //public async Task<IActionResult> FavoritesAsync(string userId, CancellationToken cancellationToken)
         //{
-        //    var itens = new List<string> { "Maçã", "Banana", "Laranja" };
+        //    var favoritelist = await _favoriteService.GetFavoriteByUserIdAsync(userId, cancellationToken);
 
         //    var htmlBuilder = new StringBuilder();
 
         //    htmlBuilder.Append("<ul>");
-        //    foreach (var item in itens)
+        //    foreach (var item in favoritelist)
         //    {
         //        htmlBuilder.Append($"<li>{item}</li>");
         //    }
         //    htmlBuilder.Append("</ul>");
 
         //    return Content(htmlBuilder.ToString(), "text/html");
-        //}
-
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         //}
     }
 }

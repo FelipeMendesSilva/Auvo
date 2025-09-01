@@ -8,12 +8,12 @@ namespace Auvo.GloboClima.Domain.Entities
 {
     public class Favorite
     {
-        public Favorite(string userId, List<string> favoritesCountries)
+        public Favorite(string userName, string favoriteCountry)
         {
-            UserId = userId;
-            FavoritesCountries = favoritesCountries;
+            UserName = userName;
+            FavoriteCountry = favoriteCountry;
         }
-        public string UserId { get; private set; }
-        public List<string> FavoritesCountries { get; private set; }
+        public string UserName { get; private set; }
+        public string FavoriteCountry { get; private set; }
     }
 }

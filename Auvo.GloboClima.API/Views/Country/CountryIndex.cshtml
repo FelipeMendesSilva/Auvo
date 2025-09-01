@@ -1,0 +1,102 @@
+﻿@model CountryModel
+@{
+    ViewData["Title"] = "Country Page";
+}
+<head>
+    <title>@ViewData["Title"]</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<div class="country-container">
+    <!-- Sidebar à esquerda -->
+    <div class="sidebar">
+        <div class="form-group">
+            <label for="selectedCountry">Selecione o país:</label>
+            <select id="selectedCountry" asp-items="@(new SelectList(Model.CountryNames))" class="form-control">
+                <option value="">-- Selecione um país --</option>
+            </select>
+        </div>
+        <br><br>
+        <label id="favoriteContentLabel" for="favoriteContent">Favoritos:</label>
+        <div id="favoriteContent"></div>
+    </div>
+
+    <!-- Conteúdo principal à direita --> 
+    <div id="countryContent"></div>
+    <button class="addFavoriteButton" id="addFavorite" hidden>Favorite</button>
+</div>
+<script>
+    var isAuthenticated = @User?.Identity?.IsAuthenticated.ToString().ToLower()
+
+    $(document).ready(function () {
+        if (isAuthenticated == true) {
+            $.ajax({
+                  url: "/Favorite/GetFavorites",
+                  type: "GET",
+                  success: function (html) {
+                         $("#favoriteContent").html(html);
+
+                  },
+                  error: function (xhr) {
+                      if (xhr.status === 401) {
+                          window.location.href = "/Auth/Login";
+                      } else {
+                          alert("Erro ao carregar a página Favorites.");
+                      }
+                  }
+            });
+
+            $('#favoriteContentLabel').css('visibility', 'visible');
+            $('#favoriteContent').css('visibility', 'visible');
+         }
+         else
+         {
+            $('#favoriteContentLabel').css('visibility', 'hidden');
+            $('#favoriteContent').css('visibility', 'hidden');
+         }
+
+
+        $('#selectedCountry').on('change', function () {
+            var selectedValue = $(this).val();
+
+            if (selectedValue) {
+                $.ajax({
+                    url: '/Country/GetCountry',
+                    type: 'POST',
+                    data: { countryName: selectedValue },
+                    success: function (html) {
+                        $("#countryContent").html(html);
+
+                        if (isAuthenticated == true) 
+                             $('#addFavorite').removeAttr('hidden');
+                    },
+                    error: function () {
+                        alert('Erro ao buscar dados do país.');
+                    }
+                });
+            }
+        });
+
+        $('#addFavorite').on('click', function () {
+        var countryName = $('#selectedCountry').val();
+
+        if (countryName) {
+            $.ajax({
+                url: '/Favorite/AddFavorite',
+                type: 'POST',
+                data: { countryName: countryName },
+                success: function () {
+                    alert('ECadastrado aos favorito.');
+                },
+                error: function () {
+                    alert('Erro ao cadastrar favorito.');
+                }
+            });
+        } 
+        else {
+            $('#favoriteResponse').text('Por favor, digite o nome de um país.');
+        }
+        });
+    });
+
+</script>

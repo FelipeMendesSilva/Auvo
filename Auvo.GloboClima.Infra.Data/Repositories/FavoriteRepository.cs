@@ -1,4 +1,7 @@
-﻿using Auvo.GloboClima.Infra.Data.Context;
+﻿using Auvo.GloboClima.Domain.Entities;
+using Auvo.GloboClima.Domain.Interfaces.Repositories;
+using Auvo.GloboClima.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Auvo.GloboClima.Infra.Data.Repositories
 {
-    public class FavoriteRepository
+    public class FavoriteRepository : IFavoriteRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -16,11 +19,23 @@ namespace Auvo.GloboClima.Infra.Data.Repositories
             _context = context;
         }
 
-        //public async Task<bool> CreateAsync(Favorite movement, CancellationToken cancellationToken)
-        //{
-        //    await _context.MovimentosManuais.AddAsync(movement, cancellationToken);
-        //    var success = await _context.SaveChangesAsync(cancellationToken);
-        //    return success > 0;
-        //}
+        public async Task<List<Favorite>> GetListByUserNameAsync(string userName, CancellationToken cancellationToken)
+        {
+            return await _context.Favorites                
+                .Where(f => f.UserName == userName)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> AddAsync(Favorite favorite, CancellationToken cancellationToken)
+        {
+            await _context.Favorites.AddAsync(favorite, cancellationToken);
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
+        }
+
+        public async Task<bool> DeleteAsync(Favorite favorite, CancellationToken cancellationToken)
+        {
+            _context.Favorites.Remove(favorite);
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
+        }
     }
 }

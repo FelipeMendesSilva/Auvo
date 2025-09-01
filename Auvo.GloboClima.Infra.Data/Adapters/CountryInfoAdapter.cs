@@ -1,5 +1,5 @@
 ﻿using Auvo.GloboClima.Domain.DTO;
-using Auvo.GloboClima.Domain.Interfaces;
+using Auvo.GloboClima.Domain.Interfaces.Adapter;
 using Auvo.GloboClima.Infra.Data.DTO;
 using Flurl;
 using Flurl.Http;

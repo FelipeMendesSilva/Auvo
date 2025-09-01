@@ -1,6 +1,6 @@
 ﻿using Auvo.GloboClima.Application.Interfaces;
 using Auvo.GloboClima.Domain.DTO;
-using Auvo.GloboClima.Domain.Interfaces;
+using Auvo.GloboClima.Domain.Interfaces.Adapter;
 using Microsoft.Extensions.Caching.Memory;
 using System.Threading;
 
@@ -32,9 +32,10 @@ public class CountryService : ICountryService
     }
 
     public async Task<CountryDto> GetCountryByNameAsync(string name, CancellationToken cancellationToken)
-    {       
-        var country = await _countryInfoAdapter.GetCountryByNamesAsync(name, cancellationToken);        
+    {
+        var country = await _countryInfoAdapter.GetCountryByNamesAsync(name, cancellationToken);
 
         return country;
     }
+
 }

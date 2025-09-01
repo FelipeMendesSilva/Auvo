@@ -52,6 +52,7 @@ namespace Auvo.GloboClima.API.IoC
 
             //services
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
         }
     }
 }

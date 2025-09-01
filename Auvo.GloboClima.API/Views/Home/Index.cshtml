@@ -1,78 +1,11 @@
-﻿@model IndexModel
+﻿
 @{
     ViewData["Title"] = "Home Page";
 }
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 </head>
-<div class="country-container">
-    <!-- Sidebar à esquerda -->
-    <div class="sidebar">
-        <div class="form-group">
-            <label for="selectedCountry">Selecione o país:</label>
-            <select id="selectedCountry" asp-items="@(new SelectList(Model.CountryNames))" class="form-control">
-                <option value="">-- Selecione um país --</option>
-            </select>
-        </div>
-        <br><br>
-        <label id="favoriteContentLabel" for="favoriteContent">Favoritos:</label>
-        <div id="favoriteContent"></div>
-    </div>
+<h2>Home</h2>
 
-    <!-- Conteúdo principal à direita --> 
-    
-    <div id="countryContent"></div>
-</div>
 <script>
-    var isAuthenticated = @User?.Identity?.IsAuthenticated.ToString().ToLower()
-
-    $(document).ready(function () {
-        if (isAuthenticated == true) {
-            $.ajax({
-                  url: "/Home/Favorites",
-                  type: "GET",
-                  success: function (html) {
-                         $("#favoriteContent").html(html);
-
-                  },
-                  error: function (xhr) {
-                      if (xhr.status === 401) {
-                          window.location.href = "/Auth/Login";
-                      } else {
-                          alert("Erro ao carregar a página Favorites.");
-                      }
-                  }
-            });
-
-            $('#favoriteContentLabel').css('visibility', 'visible');
-            $('#favoriteContent').css('visibility', 'visible');
-         }
-         else
-         {
-            $('#favoriteContentLabel').css('visibility', 'hidden');
-            $('#favoriteContent').css('visibility', 'hidden');
-         }
-
-
-        $('#selectedCountry').on('change', function () {
-            var selectedValue = $(this).val();
-
-            if (selectedValue) {
-                $.ajax({
-                    url: '/Home/GetCountry',
-                    type: 'POST',
-                    data: { countryName: selectedValue },
-                    success: function (html) {
-                        $("#countryContent").html(html);
-                    },
-                    error: function () {
-                        alert('Erro ao buscar dados do país.');
-                    }
-                });
-            }
-        });
-    });
-
-
 </script>
