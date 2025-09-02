@@ -20,51 +20,6 @@ namespace Auvo.GloboClima.API.Controllers
             return Redirect("Country/CountryIndex");
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> GetCountryAsync(string countryName, CancellationToken cancellationToken)
-        //{
-        //    var country = await _countryService.GetCountryByNameAsync(countryName,cancellationToken);
-
-        //    var properties = typeof(CountryDto).GetProperties();
-        //    var htmlBuilder = new StringBuilder();
-
-        //    htmlBuilder.Append($"<img src={country.FlagImg} alt =\"flag\" class =\"flag\" >");
-        //    htmlBuilder.Append($"<div>");
-        //    htmlBuilder.Append($"<h2>{country.Name}</h2><ul>");
-
-        //    foreach (var prop in properties)
-        //    {
-        //        var value = prop.GetValue(country);
-        //        if(prop.Name != "FlagImg")
-        //        {
-        //            htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
-        //        }
-        //    }
-        //    htmlBuilder.Append($"</div>");
-
-        //    TempData["FlagLink"] = country.FlagImg;
-
-        //    return Content(htmlBuilder.ToString(), "text/html");
-        //}
-
-        //[Authorize]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public IActionResult Favorites()
-        //{
-        //    var itens = new List<string> { "Maçã", "Banana", "Laranja" };
-
-        //    var htmlBuilder = new StringBuilder();
-
-        //    htmlBuilder.Append("<ul>");
-        //    foreach (var item in itens)
-        //    {
-        //        htmlBuilder.Append($"<li>{item}</li>");
-        //    }
-        //    htmlBuilder.Append("</ul>");
-
-        //    return Content(htmlBuilder.ToString(), "text/html");
-        //}
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

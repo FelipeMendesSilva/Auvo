@@ -32,9 +32,7 @@ namespace Auvo.GloboClima.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetFavoritesAsync(CancellationToken cancellationToken)
         {
-            var userName = User.Claims.First(x=>x.Type == ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine($"Usuário autenticado: {userName}");
-            var user = await _userManager.GetUserAsync(User);
+            var userName = GetUserName();
             if (userName == null)
                 return NotFound("Usuário não encontrado.");
 
@@ -52,34 +50,38 @@ namespace Auvo.GloboClima.API.Controllers
             return Content(htmlBuilder.ToString(), "text/html");
         }
 
-        [HttpGet("AddFavorite")]
+        [HttpPost("AddFavorite")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AddFavoriteAsync(string countryName, CancellationToken cancellationToken)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) 
+
+            var userName = GetUserName();
+            if (userName == null)
                 return NotFound("Usuário não encontrado.");
-            
-            var added = await _favoriteService.AddAsync(user.Id,countryName, cancellationToken);
+
+            var added = await _favoriteService.AddAsync(userName, countryName, cancellationToken);
             if (!added)
                 return StatusCode(500, "Erro ao adicionar o país aos favoritos.");
 
             return Ok();
         }
 
-        [HttpGet("DeleteFavorite")]
+        [HttpDelete("DeleteFavorite")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteFavoriteAsync(string countryName, CancellationToken cancellationToken)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+
+            var userName = GetUserName();
+            if (userName == null)
                 return NotFound("Usuário não encontrado.");
 
-            var deleted = await _favoriteService.DeleteAsync(user.Id, countryName, cancellationToken);
+            var deleted = await _favoriteService.DeleteAsync(userName, countryName, cancellationToken);
             if (!deleted)
                 return StatusCode(500, "Erro ao deletar o país aos favoritos.");
 
             return Ok();
         }
+
+        private string? GetUserName() => User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier && !Guid.TryParse(x.Value, out _))?.Value;
     }
 }

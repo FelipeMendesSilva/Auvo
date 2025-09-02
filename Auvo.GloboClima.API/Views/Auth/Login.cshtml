@@ -9,15 +9,21 @@
 }
 
 <form id="loginForm">
-    <div>
-        <label>Email</label>
-        <input type="email" id="email" />
-    </div>
-    <div>
-        <label>Senha</label>
-        <input type="password" id="password" />
-    </div>
-    <button type="submit">Entrar</button>
+    <table>
+        <tr>
+            <td><label for="email">Email:</label></td>
+            <td><input type="email" id="email" name="email" /></td>
+        </tr>
+        <tr>
+            <td><label for="password">Senha:</label></td>
+            <td><input type="password" id="password" name="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: right;">
+                <button type="submit">Entrar</button>
+            </td>
+        </tr>
+    </table>
 </form>
 
 @section Scripts {

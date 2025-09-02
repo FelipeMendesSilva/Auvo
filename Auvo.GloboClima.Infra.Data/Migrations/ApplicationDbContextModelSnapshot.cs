@@ -22,6 +22,21 @@ namespace Auvo.GloboClima.Infra.Data.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Auvo.GloboClima.Domain.Entities.Favorite", b =>
+                {
+                    b.Property<string>("UserName")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("UserName");
+
+                    b.Property<string>("FavoriteCountry")
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("Country");
+
+                    b.HasKey("UserName", "FavoriteCountry");
+
+                    b.ToTable("Favorite", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

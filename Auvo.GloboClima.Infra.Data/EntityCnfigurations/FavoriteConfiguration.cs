@@ -15,8 +15,8 @@ namespace BNP.CMM.Infra.EntityConfiguration
             builder.HasKey(p => new { p.UserName, p.FavoriteCountry });
 
             builder.Property(p => p.UserName)
-                   .HasColumnName("User_Id")
-                   .HasColumnType("varchar(255)")
+                   .HasColumnName("UserName")
+                   .HasColumnType("varchar(256)")
                    .IsRequired();
 
             builder.Property(p => p.FavoriteCountry)

@@ -20,10 +20,8 @@ namespace Auvo.GloboClima.Application.Services
 
         public async Task<List<string>> GetFavoriteByUserNameAsync(string userName, CancellationToken cancellationToken)
         {
-            //var favoriteList = await _favoriteRepository.GetListByUserNameAsync(userId, cancellationToken);
-            //var favoriteStringList = favoriteList.Select(x => x.FavoriteCountry).ToList();
-            var favoriteStringList =new List<string>() {"teste1", "teste2" };
-            return favoriteStringList;
+            var favoriteList = await _favoriteRepository.GetListByUserNameAsync(userName, cancellationToken);
+            return favoriteList.Select(x => x.FavoriteCountry).ToList();
         }
 
         public async Task<bool> AddAsync(string userName, string countryName, CancellationToken cancellationToken)
@@ -35,9 +33,7 @@ namespace Auvo.GloboClima.Application.Services
         public async Task<bool> DeleteAsync(string userName, string countryName, CancellationToken cancellationToken)
         {
             var fav = new Favorite(userName, countryName);
-            var favoriteList = await _favoriteRepository.DeleteAsync(fav, cancellationToken);
-
-            return favoriteList;
+            return await _favoriteRepository.DeleteAsync(fav, cancellationToken);
         }
     }
 }
