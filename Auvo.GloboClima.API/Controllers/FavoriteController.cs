@@ -43,7 +43,7 @@ namespace Auvo.GloboClima.API.Controllers
             htmlBuilder.Append("<ul>");
             foreach (var item in favoritelist)
             {
-                htmlBuilder.Append($"<li>{item}</li>");
+                htmlBuilder.Append($"<li class=\"canClick\">{item}</li>");
             }
             htmlBuilder.Append("</ul>");
 

@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Auvo.GloboClima.Infra.Data\Auvo.GloboClima.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>

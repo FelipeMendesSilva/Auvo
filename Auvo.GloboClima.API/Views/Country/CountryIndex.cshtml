@@ -6,6 +6,7 @@
 <head>
     <title>@ViewData["Title"]</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 <div class="country-container">
@@ -18,17 +19,19 @@
             </select>
         </div>
         <br><br>
-        <label id="favoriteContentLabel">Favoritos:</label>
+        <label id="favoriteContentLabel"><i class="fa-solid fa-star" style="color: #FFD43B;"></i> Favoritos:</label>
         <div id="favoriteContent"></div>
     </div>
 
     <!-- Conteúdo principal à direita -->
     <div id="countryContent"></div>
-    <button class="addFavoriteButton" id="addFavorite" hidden>Favorite</button>
+    <button class="addFavoriteButton" id="addFavorite" alt="Favorite" hidden></button>
 </div>
 <script>
     var isAuthenticated = @User?.Identity?.IsAuthenticated.ToString().ToLower()
     var addFavoriteButton = false
+    var favAdd ='<i class="fa-regular fa-star"></i>'
+    var favDelete = '<i class="fa-solid fa-star" style="color: #FFD43B;"></i>'
 
     $(document).ready(function () {
         if (isAuthenticated == true) {
@@ -36,15 +39,15 @@
 
             $('#favoriteContentLabel').css('visibility', 'visible');
             $('#favoriteContent').css('visibility', 'visible');
-         }
-         else
-         {
-            $('#favoriteContentLabel').css('visibility', 'hidden');
-            $('#favoriteContent').css('visibility', 'hidden');
-         }
+        }
+        else
+        {
+           $('#favoriteContentLabel').css('visibility', 'hidden');
+           $('#favoriteContent').css('visibility', 'hidden');
+        }
 
 
-         $('#addFavorite').on('click', function () {
+        $('#addFavorite').on('click', function () {
              var countryName = $('#selectedCountry').val();
 
              if (countryName && addFavoriteButton === true) {
@@ -55,7 +58,7 @@
                      success: function () {
                          LoadFavorites();
                          addFavoriteButton = !addFavoriteButton;
-                         $('#addFavorite').text("Remover dos Favoritos");
+                         $('#addFavorite').html(favDelete);
                          
                      },
                      error: function () {
@@ -70,7 +73,7 @@
                      success: function () {
                          LoadFavorites();
                          addFavoriteButton = !addFavoriteButton;
-                         $('#addFavorite').text("Adicionar aos Favoritos");
+                         $('#addFavorite').html(favAdd);
                      },
                      error: function () {
                          alert('Erro ao deletar favorito.');
@@ -80,8 +83,13 @@
              else {
                  alert('Por favor, selecione o país.');
              }
-
         });
+
+        $('#favoriteContent').on('click', 'li', function () {
+            var texto = $(this).text();
+                GetCountry(texto);
+        });
+
 
 
         $('#selectedCountry').on('change', function () {
@@ -98,11 +106,11 @@
                              
                              if(response.isFavorite === true){
                                  addFavoriteButton = !response.isFavorite;
-                                $('#addFavorite').text("Remover dos Favoritos");
+                                $('#addFavorite').html(favDelete);
                              }
                              else{
                                  addFavoriteButton = !response.isFavorite;
-                                 $('#addFavorite').text("Adicionar aos Favoritos");
+                                 $('#addFavorite').html(favAdd);
                              }                             
                         }
                         $("#countryContent").html(response.html);
@@ -112,26 +120,51 @@
                     }
                 });
             }
-        });        
+        });             
     });
 
+    function GetCountry(countryname) {
+        $.ajax({
+                url: '/Country/GetCountry',
+                type: 'POST',
+                data: { countryName: countryname },
+                success: function (response) {
+                    if (isAuthenticated == true) {
+                         $('#addFavorite').removeAttr('hidden');
+              
+                         if(response.isFavorite === true){
+                             addFavoriteButton = !response.isFavorite;
+                            $('#addFavorite').html(favDelete);
+                         }
+                         else{
+                             addFavoriteButton = !response.isFavorite;
+                             $('#addFavorite').html(favAdd);
+                         }
+                    }
+                    $("#countryContent").html(response.html);
+                },
+                error: function () {
+                    alert('Erro ao buscar dados do país.');
+                }
+        });
+    }
 
     function LoadFavorites() {
         $.ajax({
-                  url: "/Favorite/GetFavorites",
-                  type: "GET",
-                  success: function (html) {
-                         $("#favoriteContent").html(html);
+                url: "/Favorite/GetFavorites",
+                type: "GET",
+                success: function (html) {
+                       $("#favoriteContent").html(html);
 
-                  },
-                  error: function (xhr) {
-                      if (xhr.status === 401) {
-                          window.location.href = "/Auth/Login";
-                      } 
-                      else {
-                          alert("Erro ao carregar a página Favorites.");
-                      }
-                  }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 401) {
+                        window.location.href = "/Auth/Login";
+                    } 
+                    else {
+                        alert("Erro ao carregar a página Favorites.");
+                    }
+                }
         });
     }
 

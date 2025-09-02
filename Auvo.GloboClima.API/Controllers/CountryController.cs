@@ -44,7 +44,7 @@ namespace Auvo.GloboClima.API.Controllers
             var htmlBuilder = new StringBuilder();
 
             htmlBuilder.Append($"<img src={country.FlagImg} alt =\"flag\" class =\"flag\" >");
-            htmlBuilder.Append($"<div>");
+            htmlBuilder.Append($"<div class=\"countryInfo\">");
             htmlBuilder.Append($"<h2>{country.Name}</h2><ul>");
 
             foreach (var prop in properties)
@@ -55,7 +55,7 @@ namespace Auvo.GloboClima.API.Controllers
                 else
                     htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
             }
-            htmlBuilder.Append($"</div>");
+            htmlBuilder.Append($"</ul></div>");
 
             bool isFavorite = false;
 

@@ -107,8 +107,23 @@ h4 {
     margin-top: 0;
 }
 
-.addFavoriteButton{
-    height:30px;
-    width:60px;
-    margin:20px;
+.addFavoriteButton {
+    height: 30px;
+    width: 60px;
+    margin: 20px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.countryInfo {
+    width: 400px;
+}
+
+.canClick {
+    cursor: pointer;
+}
+
+.canClick:hover {
+    background-color: #d1eaff;
 }

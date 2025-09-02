@@ -2,6 +2,8 @@
 @model LoginDto
 
 <h2>Login</h2>
+<br>
+<br>
 
 @if (TempData["Error"] != null)
 {
@@ -13,11 +15,12 @@
         <tr>
             <td><label for="email">Email:</label></td>
             <td><input type="email" id="email" name="email" /></td>
-        </tr>
+        </tr>        
         <tr>
             <td><label for="password">Senha:</label></td>
             <td><input type="password" id="password" name="password" /></td>
         </tr>
+        <br>
         <tr>
             <td colspan="2" style="text-align: right;">
                 <button type="submit">Entrar</button>
