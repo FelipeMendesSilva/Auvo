@@ -40,7 +40,7 @@ namespace Auvo.GloboClima.Infra.Data.Adapters
                 .GetJsonAsync<List<CountryRestCountryResponseDto>>(); 
             var response = responseList.FirstOrDefault();
 
-            var country = new CountryDto(
+            return new CountryDto(
                 response?.name?.common,
                 string.Join(",", response.currencies.Select(kvp => $"{kvp.Key}:{kvp.Value.symbol}-{kvp.Value.name}")),
                 string.Join(",", response.capital),
@@ -54,9 +54,7 @@ namespace Auvo.GloboClima.Infra.Data.Adapters
                 response.flag,
                 response.flags.svg,
                 response.population,
-                string.Join(",", response.continents));
-
-            return country;
+                string.Join(",", response.continents));             
         }
     }
 }

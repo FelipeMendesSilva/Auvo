@@ -32,8 +32,6 @@ public class CountryService : ICountryService
 
     public async Task<CountryDto> GetCountryByNameAsync(string name, CancellationToken cancellationToken)
     {
-        var country = await _countryInfoAdapter.GetCountryByNamesAsync(name, cancellationToken);
-
-        return country;
+        return await _countryInfoAdapter.GetCountryByNamesAsync(name, cancellationToken);
     }
 }
