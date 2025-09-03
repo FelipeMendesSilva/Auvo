@@ -3,11 +3,10 @@
 using Auvo.GloboClima.Application.Interfaces;
 using Auvo.GloboClima.Application.Services;
 using Auvo.GloboClima.Infra.Data.Context;
+using Auvo.GloboClima.Infra.Data.IoC;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Auvo.GloboClima.Infra.Data.IoC;
 
 namespace Auvo.GloboClima.API.IoC
 {
@@ -15,6 +14,11 @@ namespace Auvo.GloboClima.API.IoC
     {
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<CountryOptions>(configuration.GetSection("Restcountries"));
+            services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+            var jwtOptions = new JwtOptions();
+            configuration.GetSection("JwtOptions").Bind(jwtOptions);
+
             services.RegisterInfraServices(configuration);
 
             services.AddDefaultIdentity<IdentityUser>(options =>
@@ -43,10 +47,10 @@ namespace Auvo.GloboClima.API.IoC
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://globoclima.com",
-                    ValidAudience = "https://globoclima.com/home",
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes("u8f9Lk3v9QzX1aB7c2d9eF6gH3jK0mN5pR8sT1vW4yZ7="))
+                        Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                 };
             });
 

@@ -1,11 +1,4 @@
-﻿using Auvo.GloboClima.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Auvo.GloboClima.Application.Interfaces
+﻿namespace Auvo.GloboClima.Application.Interfaces
 {
     public interface IFavoriteService
     {

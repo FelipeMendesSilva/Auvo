@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Auvo.GloboClima.Infra.Data.DTO
+﻿namespace Auvo.GloboClima.Infra.Data.DTO
 {
     public class NamesRestCountryResponseDto
     {

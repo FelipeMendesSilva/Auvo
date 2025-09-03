@@ -1,12 +1,7 @@
 using Auvo.GloboClima.API.Models;
 using Auvo.GloboClima.Application.Interfaces;
 using Auvo.GloboClima.Domain.DTO;
-using Auvo.GloboClima.Domain.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -15,13 +10,11 @@ namespace Auvo.GloboClima.API.Controllers
     [Route("Country")]
     public class CountryController : Controller
     {
-        private readonly ILogger<CountryController> _logger;
         private readonly IFavoriteService _favoriteService;
         private readonly ICountryService _countryService;
 
-        public CountryController(ILogger<CountryController> logger, IFavoriteService favoriteService, ICountryService countryService)
+        public CountryController(IFavoriteService favoriteService, ICountryService countryService)
         {
-            _logger = logger;
             _countryService = countryService;
             _favoriteService = favoriteService;
         }
@@ -39,6 +32,24 @@ namespace Auvo.GloboClima.API.Controllers
         public async Task<IActionResult> GetCountryAsync(string countryName, CancellationToken cancellationToken)
         {
             var country = await _countryService.GetCountryByNameAsync(countryName, cancellationToken);
+            var htmlCountry = GenerateCountryHtml(country);
+            bool isFavorite = false;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userName = User.Claims.First(x => x.Type == ClaimTypes.Name)?.Value;
+                var favorites = await _favoriteService.GetFavoriteByUserNameAsync(userName ?? "", cancellationToken);
+
+                isFavorite = favorites.Contains(country.Name);
+            }
+
+            return Json(new { html = htmlCountry, isFavorite });
+        }
+
+        private static string GenerateCountryHtml(CountryDto? country)
+        {
+            if (country == null)
+                return "<div/>";
 
             var properties = typeof(CountryDto).GetProperties();
             var htmlBuilder = new StringBuilder();
@@ -50,34 +61,14 @@ namespace Auvo.GloboClima.API.Controllers
             foreach (var prop in properties)
             {
                 var value = prop.GetValue(country);
-                if(prop.Name == "FlagImg")
+                if (prop.Name == "FlagImg")
                     htmlBuilder.Append($"<li><strong>{prop.Name}:</strong><a href=\" {value}\">link</a></li>");
                 else
                     htmlBuilder.Append($"<li><strong>{prop.Name}:</strong> {value}</li>");
             }
             htmlBuilder.Append($"</ul></div>");
 
-            bool isFavorite = false;
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userName = User.Claims.First(x => x.Type == ClaimTypes.Name)?.Value;
-                var favorites = await _favoriteService.GetFavoriteByUserNameAsync(userName ?? "", cancellationToken);
-
-                if (favorites.Contains(country.Name))
-                {
-                    isFavorite = true;
-                }
-                else
-                {
-                    isFavorite = false;
-                }
-            }
-            return Json(new
-            {
-                html = htmlBuilder.ToString(),
-                isFavorite
-            });
+            return htmlBuilder.ToString();
         }
     }
 }

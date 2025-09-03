@@ -1,10 +1,11 @@
-﻿using Auvo.GloboClima.Domain.DTO;
+﻿using Auvo.GloboClima.API.IoC;
+using Auvo.GloboClima.Domain.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Auvo.GloboClima.API.Controllers
@@ -14,19 +15,21 @@ namespace Auvo.GloboClima.API.Controllers
     public class AuthController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager; 
+        private readonly IOptions<JwtOptions> _jwtOptions;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwtOptions = jwtOptions;
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("login")]
         public IActionResult Login()
         {
-            return View(); // Certifique-se de que há uma View chamada Login.cshtml
+            return View(); 
         }
 
         [HttpPost("login")]
@@ -38,31 +41,28 @@ namespace Auvo.GloboClima.API.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!result.Succeeded) return Unauthorized("Credenciais inválidas");
 
-            //  Autentica via cookie (para UI)
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            //  Gera o JWT (para APIs)
             var token = GenerateJwtToken(user);
 
-            return Ok(new { token = token });
+            return Ok(new { token });
         }
 
-        private static string GenerateJwtToken(IdentityUser user)
+        private string GenerateJwtToken(IdentityUser user)
         {
             var claims = new[]
             {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-            var secureKey = "u8f9Lk3v9QzX1aB7c2d9eF6gH3jK0mN5pR8sT1vW4yZ7=";
+            };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secureKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "https://globoclima.com",
-                audience: "https://globoclima.com/home",
+                issuer: _jwtOptions.Value.Issuer,
+                audience: _jwtOptions.Value.Audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: creds);

@@ -1,12 +1,6 @@
 ﻿using Auvo.GloboClima.Application.Interfaces;
-using Auvo.GloboClima.Domain.DTO;
 using Auvo.GloboClima.Domain.Entities;
 using Auvo.GloboClima.Domain.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Auvo.GloboClima.Application.Services
 {

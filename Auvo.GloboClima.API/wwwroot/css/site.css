@@ -95,12 +95,10 @@ body {
     color: #333;
 }
 
-
 ul {
     list-style-type: none;
     padding-left: 0; /* opcional, remove o recuo padrão */
 }
-
 
 /* Títulos */
 h4 {

@@ -1,27 +1,27 @@
 ﻿using Auvo.GloboClima.Domain.DTO;
 using Auvo.GloboClima.Domain.Interfaces.Adapter;
 using Auvo.GloboClima.Infra.Data.DTO;
-using Flurl;
+using Auvo.GloboClima.Infra.Data.IoC;
 using Flurl.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Auvo.GloboClima.Infra.Data.Adapters
 {
     public class CountryInfoAdapter : ICountryInfoAdapter
     {
-        public CountryInfoAdapter() { }
+        private readonly IOptions<CountryOptions> _countryOptions;
+        public CountryInfoAdapter(IOptions<CountryOptions> countryOptions) 
+        {
+            _countryOptions = countryOptions;
+        }
         
         public async Task<List<string>> GetAllCountryNamesAsync(CancellationToken cancellationToken)
         {
             var countryNames = new List<string>();
-            var urlBase = "https://restcountries.com/v3.1/all?fields=name"; // URL da sua API
+            var urlBase = _countryOptions.Value.GetAllCountries; 
 
             var names = await urlBase
-                .GetJsonAsync<List<NamesRestCountryResponseDto>>(); // Faz a requisição GET e desserializa o JSON para SuaClasseRetorno
+                .GetJsonAsync<List<NamesRestCountryResponseDto>>(); 
                    
             foreach(var name in names)
             {
@@ -30,16 +30,14 @@ namespace Auvo.GloboClima.Infra.Data.Adapters
             countryNames.Sort();
 
             return countryNames; 
-
         }
 
         public async Task<CountryDto> GetCountryByNamesAsync(string name, CancellationToken cancellationToken)
-        {
-            
-            var urlBase = $"https://restcountries.com/v3.1/name/{name}"; // URL da sua API
+        {            
+            var urlBase = $"{_countryOptions.Value.GetCountryByName}{name}"; 
 
             var responseList = await urlBase
-                .GetJsonAsync<List<CountryRestCountryResponseDto>>(); // Faz a requisição GET e desserializa o JSON para SuaClasseRetorno
+                .GetJsonAsync<List<CountryRestCountryResponseDto>>(); 
             var response = responseList.FirstOrDefault();
 
             var country = new CountryDto(

@@ -2,7 +2,6 @@
 using Auvo.GloboClima.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace BNP.CMM.Infra.EntityConfiguration
 {

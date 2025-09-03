@@ -1,8 +1,8 @@
 ﻿@using Auvo.GloboClima.Domain.DTO
 @model LoginDto
 
-<h2>Login</h2>
 <br>
+<h2>Login</h2>
 <br>
 
 @if (TempData["Error"] != null)
@@ -47,10 +47,10 @@
                 data: JSON.stringify(loginData),
                 success: function (response) {
                     localStorage.setItem("token", response.token);
-                    window.location.href = "/Country/CountryIndex"; // redireciona após login
+                    window.location.href = "/Country/CountryIndex"; 
                 },
                 error: function (xhr) {
-                    $("#resultado").html("Erro: " + xhr.responseText);
+                    alert("Erro no serivor.");
                 }
             });
         });

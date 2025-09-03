@@ -1,7 +1,6 @@
 ﻿@model CountryModel
 @{
-    ViewData["Title"] = "Country Page";
-    
+    ViewData["Title"] = "Country Page";    
 }
 <head>
     <title>@ViewData["Title"]</title>
@@ -87,9 +86,8 @@
 
         $('#favoriteContent').on('click', 'li', function () {
             var texto = $(this).text();
-                GetCountry(texto);
+                $('#selectedCountry').val(texto).trigger('change');
         });
-
 
 
         $('#selectedCountry').on('change', function () {
@@ -123,31 +121,6 @@
         });             
     });
 
-    function GetCountry(countryname) {
-        $.ajax({
-                url: '/Country/GetCountry',
-                type: 'POST',
-                data: { countryName: countryname },
-                success: function (response) {
-                    if (isAuthenticated == true) {
-                         $('#addFavorite').removeAttr('hidden');
-              
-                         if(response.isFavorite === true){
-                             addFavoriteButton = !response.isFavorite;
-                            $('#addFavorite').html(favDelete);
-                         }
-                         else{
-                             addFavoriteButton = !response.isFavorite;
-                             $('#addFavorite').html(favAdd);
-                         }
-                    }
-                    $("#countryContent").html(response.html);
-                },
-                error: function () {
-                    alert('Erro ao buscar dados do país.');
-                }
-        });
-    }
 
     function LoadFavorites() {
         $.ajax({

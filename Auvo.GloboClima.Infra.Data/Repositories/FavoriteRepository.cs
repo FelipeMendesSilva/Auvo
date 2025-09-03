@@ -2,11 +2,6 @@
 using Auvo.GloboClima.Domain.Interfaces.Repositories;
 using Auvo.GloboClima.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Auvo.GloboClima.Infra.Data.Repositories
 {

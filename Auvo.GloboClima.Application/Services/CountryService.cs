@@ -2,7 +2,6 @@
 using Auvo.GloboClima.Domain.DTO;
 using Auvo.GloboClima.Domain.Interfaces.Adapter;
 using Microsoft.Extensions.Caching.Memory;
-using System.Threading;
 
 namespace Auvo.GloboClima.Application.Services;
 public class CountryService : ICountryService
@@ -37,5 +36,4 @@ public class CountryService : ICountryService
 
         return country;
     }
-
 }

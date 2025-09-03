@@ -1,10 +1,5 @@
+using Auvo.GloboClima.API.Filters;
 using Auvo.GloboClima.API.IoC;
-using Auvo.GloboClima.Infra.Data.Context;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +17,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,7 +51,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
 
-
+app.UseExceptionHandler(options => { });
 app.MapRazorPages();
 
 await app.RunAsync();

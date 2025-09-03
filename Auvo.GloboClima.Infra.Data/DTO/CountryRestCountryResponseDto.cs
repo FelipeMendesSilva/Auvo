@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace Auvo.GloboClima.Infra.Data.DTO
+﻿namespace Auvo.GloboClima.Infra.Data.DTO
 {
-
     public class CountryRestCountryResponseDto
     {
-        public Name name { get; set; }
+        public Name? name { get; set; }
         public List<string> tld { get; set; }
         public string cca2 { get; set; }
         public string ccn3 { get; set; }
