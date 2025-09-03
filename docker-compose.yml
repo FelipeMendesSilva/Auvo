@@ -6,23 +6,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: senha
       MYSQL_USER: usuario
       MYSQL_PASSWORD: senha
       MYSQL_DATABASE: GCDB
     volumes:
       - ./data:/var/lib/mysql  # Mapeamento do volume
       
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: gcapp
-    ports:
-      - "7038:8080"  # Expondo a porta da aplicação
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Default=Server=db;Port=3306;Database=GCDB;Uid=usuario;Pwd=senha;SslMode=none;"
-
-    depends_on:
-      - db
